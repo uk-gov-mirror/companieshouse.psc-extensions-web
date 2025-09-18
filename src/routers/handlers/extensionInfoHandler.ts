@@ -8,7 +8,8 @@ export class ExtensionInfoHandler extends GenericHandler<BaseViewData> {
     protected override async getViewData (req: Request, res: Response): Promise<BaseViewData> {
         const baseViewData = await super.getViewData(req, res);
         // may need to get companyNumber: string, pscNotificationId: string from req.params
-        const { companyNumber, pscNotificationId } = req.params;
+        //  const { companyNumber, pscNotificationId } = req.params;
+        console.log(res.locals?.companyProfile);
         // getPscIndividual request seems to work but its returning an error message
         // const result = await getPscIndividual(req, "companyNumber", "pscNotificationId");
         // console.log(result);

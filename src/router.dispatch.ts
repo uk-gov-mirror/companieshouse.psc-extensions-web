@@ -15,7 +15,7 @@ const routerDispatch = (app: Application) => {
 
     app.use(SERVICE_PATH_PREFIX, router);
     router.use(PATHS.HEALTHCHECK, healthCheckRouter);
-    router.use(PATHS.EXTENSION_INFO, authenticate, extensionInfoRouter);
+    router.use(PATHS.EXTENSION_INFO, authenticate, fetchCompany, extensionInfoRouter);
     router.use(PATHS.EXTENSION_REFUSED, authenticate, extensionRefusedRouter);
     router.use(PATHS.REASON_FOR_EXTENSION, authenticate, reasonForExtensionRouter);
     router.use(PATHS.EXTENSION_CONFIRMATION, authenticate, fetchCompany, extensionConfirmationRouter);
