@@ -4,7 +4,8 @@ import Resource, { ApiErrorResponse } from "@companieshouse/api-sdk-node/dist/se
 import { HttpStatusCode } from "axios";
 import { createOAuthApiClient } from "../lib/utils/api.client";
 import { logger } from "../lib/logger";
-import { HttpError } from "lib/errors/httpError";
+import { HttpError } from "../lib/errors/httpError";
+import { Headers } from "@companieshouse/api-sdk-node/dist/http";
 
 // todo: move this to sdk? // NOSONAR
 export interface PscExtensionsData {
@@ -122,7 +123,5 @@ export const getPscExtension = async (request: Request, transactionId: string, p
     return castedResponse;
 };
 
-export function extractRequestIdHeader (request: Request): { [key: string]: string } {
-    const requestId = request.headers["x-request-id"] as string;
-    return requestId ? { "x-request-id": requestId } : {};
-}
+export const extractRequestIdHeader = (req: Request): Headers =>
+    req.requestId ? { "X-Request-Id": req.requestId } : {};

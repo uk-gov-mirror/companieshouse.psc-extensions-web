@@ -9,3 +9,7 @@ export const createOAuthApiClient = (session: Session | undefined, baseUrl: stri
     if (!session) throw new Error();
     return createApiClient(undefined, getAccessToken(session as Session), baseUrl);
 };
+
+export const createApiKeyClient = (): ApiClient => {
+    return createApiClient(process.env.CHS_INTERNAL_API_KEY, undefined, env.API_URL);
+};

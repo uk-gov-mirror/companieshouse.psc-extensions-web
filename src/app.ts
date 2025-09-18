@@ -9,6 +9,7 @@ import { sessionMiddleware } from "./middleware/session.middleware";
 import { i18nMiddleware } from "./middleware/i18n.middleware";
 import { templateMiddleware } from "./middleware/template.middleware";
 import { SERVICE_PATH_PREFIX } from "./lib/constants";
+import { requestIdGenerator } from "./middleware/requestIdGenerator";
 
 const app = express();
 
@@ -55,6 +56,9 @@ app.enable("trust proxy");
 // parse body into req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// set x-request-id header for all requests
+app.use(requestIdGenerator);
 
 app.use(cookieParser());
 
