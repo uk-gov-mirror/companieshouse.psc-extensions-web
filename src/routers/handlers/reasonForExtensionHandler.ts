@@ -3,17 +3,23 @@ import { BaseViewData, GenericHandler, ViewModel } from "./abstractGenericHandle
 import { logger } from "../../lib/logger";
 import { SERVICE_PATH_PREFIX, PATHS, ROUTER_VIEWS_FOLDER_PATH, ExtensionReasons } from "../../lib/constants";
 import { PscExtensionsFormsValidator } from "../../lib/validation/form-validators/pscExtensions";
+import { getPscIndividual } from "../../services/pscIndividualService";
+import { formatDateBorn } from "./extensionInfoHandler";
 
 interface ExtensionReasonViewData extends BaseViewData {
     reasons: typeof ExtensionReasons;
+    pscName: string;
+    dateOfBirth: string;
 }
-
 export class ReasonForExtensionHandler extends GenericHandler<BaseViewData> {
 
     protected override async getViewData (req: Request, res: Response): Promise<ExtensionReasonViewData> {
         const baseViewData = await super.getViewData(req, res);
+        const result = await getPscIndividual(req, "00006400", "PSCDATA5");
         return {
             ...baseViewData,
+            pscName: result.resource?.name!,
+            dateOfBirth: formatDateBorn(result.resource?.dateOfBirth),
             backURL: SERVICE_PATH_PREFIX + PATHS.EXTENSION_INFO,
             templateName: PATHS.REASON_FOR_EXTENSION.slice(1),
             reasons: ExtensionReasons

@@ -1,10 +1,18 @@
 import { ReasonForExtensionHandler } from "../../../src/routers/handlers/reasonForExtensionHandler";
 import { ExtensionReasons } from "../../../src/lib/constants";
 import { Request, Response } from "express";
+import { HttpStatusCode } from "axios";
+import { PSC_INDIVIDUAL } from "../../mocks/psc.mock";
 
 let req: Partial<Request>;
 const res: Partial<Response> = {};
 
+jest.mock("../../../src/services/pscIndividualService", () => ({
+    getPscIndividual: () => ({
+        httpStatusCode: HttpStatusCode.Ok,
+        resource: PSC_INDIVIDUAL
+    })
+}));
 describe("Reason for extension handler", () => {
 
     describe("executePost", () => {

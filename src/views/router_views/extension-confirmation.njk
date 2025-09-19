@@ -7,7 +7,7 @@
   {{i18n.extension_confirmation_deadline_html}}
 </div>
 <strong>
-[Extension date]
+{{dueDate}}
 </strong>
 {% endset %}
 
@@ -40,7 +40,7 @@
         text: i18n.extension_confirmation_psc_name
       },
       value: {
-        text: psc.pscName
+        text: pscName
       }
     },
     {
@@ -48,7 +48,7 @@
         text: i18n.extension_confirmation_reference_number
       },
       value: {
-        text: '[Reference number]'
+        text: referenceNumber
       }
     }
   ]
