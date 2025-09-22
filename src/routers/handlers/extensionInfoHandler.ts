@@ -3,6 +3,7 @@ import { BaseViewData, GenericHandler, ViewModel } from "./abstractGenericHandle
 import { logger } from "../../lib/logger";
 import { SERVICE_PATH_PREFIX, PATHS, ROUTER_VIEWS_FOLDER_PATH } from "../../lib/constants";
 import { getPscIndividual } from "../../services/pscIndividualService";
+import { getCompanyProfile } from "../../services/companyProfileService";
 
 interface PscViewData extends BaseViewData {
     companyName: string;
@@ -25,15 +26,19 @@ export class ExtensionInfoHandler extends GenericHandler<PscViewData> {
 
     protected override async getViewData (req: Request, res: Response): Promise<PscViewData> {
         const baseViewData = await super.getViewData(req, res);
-        // may need to get companyNumber: string, pscNotificationId: string from req.params
-        //  const { companyNumber, pscNotificationId, companyName, pscName } = req.params;
-        console.log(res.locals?.companyProfile);
-        const result = await getPscIndividual(req, "00006400", "PSCDATA5");
-        console.log(result);
+        const companyNumber = req.query.companyNumber as string;
+        const selectedPscId = req.query.selectedPscId as string;
+        const pscIndividual = await getPscIndividual(req, companyNumber, selectedPscId);
+        const companyProfile = await getCompanyProfile(req, companyNumber);
+        if (!pscIndividual || !companyProfile) {
+            throw new Error("Company profile or psc is not found");
+        }
         return {
             ...baseViewData,
-            pscName: result.resource?.name!,
-            dateOfBirth: formatDateBorn(result.resource?.dateOfBirth),
+            pscName: pscIndividual.resource?.name!,
+            companyName: companyProfile.companyName,
+            companyNumber: companyProfile.companyNumber,
+            dateOfBirth: formatDateBorn(pscIndividual.resource?.dateOfBirth),
             backURL: SERVICE_PATH_PREFIX + PATHS.INDIVIDUAL_PSC_LIST,
             templateName: PATHS.EXTENSION_INFO.slice(1)
         };

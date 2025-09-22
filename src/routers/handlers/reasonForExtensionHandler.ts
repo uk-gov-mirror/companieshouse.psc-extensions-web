@@ -15,11 +15,13 @@ export class ReasonForExtensionHandler extends GenericHandler<BaseViewData> {
 
     protected override async getViewData (req: Request, res: Response): Promise<ExtensionReasonViewData> {
         const baseViewData = await super.getViewData(req, res);
-        const result = await getPscIndividual(req, "00006400", "PSCDATA5");
+        const selectedPscId = req.query.selectedPscId as string;
+        const companyNumber = req.query.companyNumber as string;
+        const pscIndividual = await getPscIndividual(req, companyNumber, selectedPscId);
         return {
             ...baseViewData,
-            pscName: result.resource?.name!,
-            dateOfBirth: formatDateBorn(result.resource?.dateOfBirth),
+            pscName: pscIndividual.resource?.name!,
+            dateOfBirth: formatDateBorn(pscIndividual.resource?.dateOfBirth),
             backURL: SERVICE_PATH_PREFIX + PATHS.EXTENSION_INFO,
             templateName: PATHS.REASON_FOR_EXTENSION.slice(1),
             reasons: ExtensionReasons

@@ -14,11 +14,13 @@ export class ExtensionRefusedHandler extends GenericHandler<PscViewData> {
 
     protected override async getViewData (req: Request, res: Response): Promise<PscViewData> {
         const baseViewData = await super.getViewData(req, res);
-        const result = await getPscIndividual(req, "00006400", "PSCDATA5");
+        const companyNumber = req.query.companyNumber as string;
+        const selectedPscId = req.query.selectedPscId as string;
+        const pscIndividual = await getPscIndividual(req, companyNumber, selectedPscId);
         return {
             ...baseViewData,
-            pscName: result.resource?.name!,
-            dateOfBirth: formatDateBorn(result.resource?.dateOfBirth),
+            pscName: pscIndividual.resource?.name!,
+            dateOfBirth: formatDateBorn(pscIndividual.resource?.dateOfBirth),
             // TODO: Add search params to backURL
             backURL: SERVICE_PATH_PREFIX + PATHS.INDIVIDUAL_PSC_LIST,
             templateName: PATHS.EXTENSION_REFUSED.slice(1)
