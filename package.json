@@ -12,6 +12,7 @@
     "build:assets": "gulp build",
     "build:server": "tsc && cp -r src/views dist/ && cp -r src/config dist/ && cp -r locales dist/",
     "build": "npm run build:assets && npm run build:server",
+    "dev": "ts-node-dev --respawn --transpile-only --inspect=9229 -r dotenv/config src/httpServer.ts",
     "lint": "eslint 'src/*.ts' 'src/**/*.ts' 'test/src/**/*.ts'",
     "lint:fix": "eslint 'src/*.ts' 'src/**/*.ts' 'test/src/**/*.ts' --fix",
     "test": "jest",
@@ -41,6 +42,7 @@
     "@companieshouse/web-security-node": "^4.4.4",
     "axios": "^1.9.0",
     "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
     "express": "^4.21.2",
     "govuk-frontend": "5.10.2",
     "http-errors": "^1.7.3",
@@ -87,6 +89,7 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
     "ts-node": "8.10.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "4.9.5"
   },
   "@comments devDependencies": {
